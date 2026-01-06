@@ -12,14 +12,26 @@ export default function Page() {
   const [input, setInput] = useState('')
   const [reply, setReply] = useState('')
 
-  async function send() {
+async function send() {
+  try {
     const res = await fetch('/api/diesel-ai', {
-      method:'POST',
-      body:JSON.stringify({ message: input })
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        message: input || 'spill'
+      })
     })
+
     const data = await res.json()
-    setReply(data.reply)
+
+    setReply(data.reply || 'Good. Now it’s yours.')
+  } catch (e) {
+    setReply('Say it louder.')
   }
+}
+
 
   return (
     <main>
